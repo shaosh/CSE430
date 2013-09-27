@@ -1,0 +1,30 @@
+#!/bin/bash
+#PBS -l nodes=1:ppn=16
+#PBS -N tspsaguaro
+#PBS -j oe
+#PBS -o $PBS_JOBID
+#PBS -l walltime=00:10:00
+#PBS -m abe
+#PBS -M sshao1@asu.edu
+
+module load gcc/4.4.4
+gcc -fopenmp -o tspp tsp-parallel.c
+gcc -o tsps tsp-serial.c
+cd
+$PBS_O_WORKDIR
+export OMP_NUM_THREADS=8
+export OMP_DYNAMIC=TRUE
+echo "Output from tsp-parallel 1"
+./tspp 5.txt
+echo "Output from tsp-parallel 2"
+./tspp 10.txt
+echo "Output from tsp-parallel 3"
+./tspp 15.txt
+echo "Output from tsp-serial 1"
+./tsps 5.txt
+echo "Output from tsp-serial 2"
+./tsps 10.txt
+echo "Output from tsp-serial 3"
+./tsps 15.txt
+
+
